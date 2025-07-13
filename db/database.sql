@@ -43,3 +43,6 @@ INSERT INTO productos (nombre, precio, categoria_id) VALUES
 INSERT INTO promociones (descripcion, descuento, producto_id) VALUES
 ('Descuento de verano', 20.00, 1),
 ('Oferta especial', 15.00, 4);
+
+
+SELECT * FROM productos

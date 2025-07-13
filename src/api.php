@@ -17,7 +17,7 @@ $id = $uri[1] ?? null;
 header('Content-Type: application/json');
 
 // http://localost:8081{/....} -> Endpoints
-if($recurso !== 'products'){
+if($recurso !== 'productos'){
     http_response_code(404);
     echo json_encode(['error' => 'Recurso no encontrado', 'code' => 404, 'errorUrl' => 'https://http.cat/status/404']);
     exit;
@@ -26,16 +26,16 @@ if($recurso !== 'products'){
 
 switch ($method) {
     case 'GET':
-        $stmt = $pdo ->prepare("SELECT id,name,precio FROM products");
+        $stmt = $pdo ->prepare("SELECT id,nombre,precio,categoria_id FROM productos");
         $stmt ->execute();
         $response = $stmt ->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($response);
         break;
     case 'POST':
         $data = json_decode(file_get_contents('php://input'), true);
-        $stmt = $pdo->prepare("INSERT INTO products (name, precio) VALUES(? , ?)");
+        $stmt = $pdo->prepare("INSERT INTO productos (nombre, precio,categoria_id) VALUES(? , ?, ?)");
         $stmt ->execute([
-            $data['name'], $data['precio'],
+            $data['nombre'], $data['precio'], $data['categoria_id'],
         ]);
         http_response_code(201);
         $data['id'] = $pdo->lastInsertId();
@@ -48,23 +48,24 @@ switch ($method) {
             exit;
         }
         $data = json_decode(file_get_contents('php://input'), true);
-        $stmt = $pdo->prepare("UPDATE products SET id = ?, name=?, precio= ? WHERE id = ?");
+        $stmt = $pdo->prepare("UPDATE productos SET id = ?, nombre=?, precio= ?, categoria_id=? WHERE id = ?");
         $stmt->execute([
             $data['id'],
-            $data['name'],
+            $data['nombre'],
             $data['precio'],
+            $data['categoria_id'],
             $id,
         ]);
         echo json_encode($data);
         break;
         case 'DELETE':
-        $stmt2 = $pdo ->prepare("SELECT id,name,precio FROM products WHERE id =?");
+        $stmt2 = $pdo ->prepare("SELECT id,nombre,precio,categoria_id FROM productos WHERE id =?");
         $stmt2->execute([$id]);
         $stmt2 ->execute();
         $response = $stmt2 ->fetch(PDO::FETCH_ASSOC);
 
         $data = json_decode(file_get_contents('php://input'), true);
-        $stmt = $pdo->prepare("DELETE FROM products WHERE id =?");
+        $stmt = $pdo->prepare("DELETE FROM productos WHERE id =?");
         $stmt->execute([$id]);
         http_response_code(200);
         if($stmt->rowCount()>0){
@@ -76,4 +77,4 @@ switch ($method) {
         }
         break;
         
-}
+} 
