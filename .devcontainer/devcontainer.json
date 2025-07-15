@@ -16,7 +16,8 @@
 				"bmewburn.vscode-intelephense-client",
 				"esbenp.prettier-vscode",
 				"vivaxy.vscode-conventional-commits",
-				"cweijan.vscode-mysql-client2"
+				"cweijan.vscode-mysql-client2",
+				"postman.postman-for-vscode"
 			]
 		}
 	},
